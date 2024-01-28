@@ -6,7 +6,7 @@ from fb_scraper import get_group_posts_by_group_id
 from constants import HEADER_NAMES
 
 GROUP_ID = '140473731634479'
-COOKIES_NAME = ['tuli.txt', 'keye.txt']
+COOKIES_NAME = ['keye.txt']
 COMMUNITY = 'Information'
 GROUP_URL = f'https://mbasic.facebook.com/groups/{GROUP_ID}'
 GROUP_NAME = 'HM Tour & Travels (ট্রাভেলিং গ্রুপ)'
@@ -35,9 +35,13 @@ while True:
     if not next_url:
         break
 
+    print(next_url)
+    with open('next_url.txt', 'w', newline='', encoding='utf-8') as f:
+        f.write(str(next_url))
+
+    page += 1
     cookie_index = page % len(COOKIES_NAME)
     print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
-    page += 1
 
     if data:
         group_posts = data['group_posts']
