@@ -37,6 +37,7 @@ while True:
 
     cookie_index = page % len(COOKIES_NAME)
     print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
+    page += 1
 
     if data:
         group_posts = data['group_posts']
