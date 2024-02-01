@@ -15,7 +15,6 @@ FILE_NAME = f'{GROUP_ID}.csv'
 START_URL = None
 
 page = 1
-post_ids = []
 next_url = None
 
 if not exists(f'files/{FILE_NAME}'):
@@ -47,29 +46,26 @@ while True:
         group_posts = data['group_posts']
 
         for group_post in group_posts:
-            if group_post['post_id'] not in post_ids:
-                copy_dict = {}
+            copy_dict = {}
 
-                for header in GROUP_HEADER_NAMES:
-                    if header in list(group_post.keys()):
-                        copy_dict[header] = group_post[header]
-                    else:
-                        copy_dict[header] = None
-
-                copy_dict['community'] = COMMUNITY
-                copy_dict['group_id'] = GROUP_ID
-                copy_dict['group_url'] = GROUP_URL
-                copy_dict['group_name'] = GROUP_NAME
-                copy_dict['group_about'] = GROUP_NAME
-
-                if exists(f'files/{FILE_NAME}'):
-                    with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
-                        writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
-                        writer.writerow(copy_dict)
+            for header in GROUP_HEADER_NAMES:
+                if header in list(group_post.keys()):
+                    copy_dict[header] = group_post[header]
                 else:
-                    with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
-                        writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
-                        writer.writeheader()
-                        writer.writerow(copy_dict)
+                    copy_dict[header] = None
 
-                post_ids.append(group_post['post_id'])
+            copy_dict['community'] = COMMUNITY
+            copy_dict['group_id'] = GROUP_ID
+            copy_dict['group_url'] = GROUP_URL
+            copy_dict['group_name'] = GROUP_NAME
+            copy_dict['group_about'] = GROUP_NAME
+
+            if exists(f'files/{FILE_NAME}'):
+                with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
+                    writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
+                    writer.writerow(copy_dict)
+            else:
+                with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
+                    writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
+                    writer.writeheader()
+                    writer.writerow(copy_dict)
