@@ -49,7 +49,7 @@ while True:
 
     if data:
         group_posts = data['group_posts']
-        total_posts_count += total_posts_count + len(group_posts)
+        total_posts_count += len(group_posts)
 
         for group_post in group_posts:
             copy_dict = {}

@@ -15,8 +15,9 @@ FILE_NAME = f'{PAGE_ID}.csv'
 START_URL = None
 
 page = 1
-post_ids = []
+cookie_files = f'cookies/{COOKIES_NAME[0]}'
 next_url = None
+total_posts_count = 0
 
 if not exists(f'files/{FILE_NAME}'):
     with open(f'files/{FILE_NAME}', 'w', encoding='utf-8', newline='') as csv_file:
