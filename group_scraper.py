@@ -35,8 +35,8 @@ while True:
     next_url = data['next_url']
 
     if not next_url:
-        print('This group has no posts available')
-        break
+        print('This group might not have any posts available')
+        continue
 
     print(next_url)
     with open('next_url.txt', 'w', newline='', encoding='utf-8') as f:
