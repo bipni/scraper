@@ -15,6 +15,7 @@ FILE_NAME = f'{GROUP_ID}.csv'
 START_URL = None
 
 page = 1
+cookie_files = f'cookies/{COOKIES_NAME[0]}'
 next_url = None
 total_posts_count = 0
 
@@ -26,9 +27,9 @@ if not exists(f'files/{FILE_NAME}'):
 while True:
     print(f'Total Posts Scraped: {total_posts_count}')
     if not next_url:
-        data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=f'cookies/{COOKIES_NAME[0]}', start_url=START_URL)
+        data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=START_URL)
     else:
-        data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=f'cookies/{COOKIES_NAME[0]}', start_url=next_url)
+        data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=next_url)
 
     print(f'Next URL: {data["next_url"]}')
     next_url = data['next_url']
@@ -43,6 +44,7 @@ while True:
 
     page += 1
     cookie_index = page % len(COOKIES_NAME)
+    cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
     print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
 
     if data:
