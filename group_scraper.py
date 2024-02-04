@@ -36,6 +36,7 @@ while True:
 
     if not next_url:
         print('This group might not have any posts available')
+        print(f'or {COOKIES_NAME[cookie_index]} cookie is invalid')
         continue
 
     print(next_url)
