@@ -37,6 +37,7 @@ while True:
     if not next_url:
         print('This group might not have any posts available')
         print(f'or {cookie_files} cookie is invalid')
+        page += 1
         cookie_index = page % len(COOKIES_NAME)
         cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
         print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
