@@ -24,6 +24,7 @@ if not exists(f'files/{FILE_NAME}'):
         csv_writer.writerow(GROUP_HEADER_NAMES)
 
 while True:
+    print(f'Total Posts Scraped: {total_posts_count}')
     if not next_url:
         data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=f'cookies/{COOKIES_NAME[0]}', start_url=START_URL)
     else:

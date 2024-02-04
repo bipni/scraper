@@ -6,7 +6,7 @@ from fb_scraper import get_page_posts_by_page_id
 from constants import PAGE_HEADER_NAMES
 
 PAGE_ID = 'earkidotcom'
-COOKIES_NAME = ['keye.txt']
+COOKIES_NAME = ['nila.txt']
 COMMUNITY = 'Information'
 PAGE_URL = f'https://mbasic.facebook.com/{PAGE_ID}'
 PAGE_NAME = 'Earki'
