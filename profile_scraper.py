@@ -6,7 +6,7 @@ from fb_scraper import get_profile
 from constants import PROFILE_HEADER_NAMES
 
 PROFILE_IDS = ['100089632299605', '100069502939023', 'mirjawakil', 'tanzim.taher']
-COOKIES_NAME = ['keye.txt']
+COOKIES_NAME = ['nila.txt']
 FILE_NAME = 'profiles.csv'
 
 profile_count = 0
@@ -19,12 +19,13 @@ if not exists(f'files/{FILE_NAME}'):
 
 
 for profile_id in PROFILE_IDS:
-    profile_count += 1
-    print(profile_count)
     cookie_index = profile_count % len(COOKIES_NAME)
     print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
 
     data = get_profile(profile_id, f'cookies/{COOKIES_NAME[cookie_index]}')
+
+    profile_count += 1
+    print(f'Profile Scraped: {profile_count}')
 
     if data:
         profile_info = data
@@ -32,19 +33,17 @@ for profile_id in PROFILE_IDS:
         copy_dict = {}
 
         for header in PROFILE_HEADER_NAMES:
-            copy_dict['id'] = profile_id
-
-            if header in profile_info:
+            if header in list(profile_info.keys()):
                 copy_dict[header] = profile_info[header]
             else:
-                copy_dict[header] = None
+                copy_dict[header] = profile_id if header == 'id' else None
 
-            if exists(f'files/{FILE_NAME}'):
-                with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
-                    writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
-                    writer.writerow(copy_dict)
-            else:
-                with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
-                    writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
-                    writer.writeheader()
-                    writer.writerow(copy_dict)
+        if exists(f'files/{FILE_NAME}'):
+            with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
+                writer.writerow(copy_dict)
+        else:
+            with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
+                writer.writeheader()
+                writer.writerow(copy_dict)
