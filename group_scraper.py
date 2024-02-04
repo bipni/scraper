@@ -26,6 +26,7 @@ if not exists(f'files/{FILE_NAME}'):
 
 while True:
     print(f'Total Posts Scraped: {total_posts_count}')
+
     if not next_url:
         data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=START_URL)
     else:
@@ -43,7 +44,6 @@ while True:
         print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
         continue
 
-    print(next_url)
     with open('next_url.txt', 'w', newline='', encoding='utf-8') as f:
         f.write(str(next_url))
 
