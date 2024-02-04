@@ -5,3 +5,7 @@ GROUP_HEADER_NAMES = ['post_id', 'post_url', 'post_text', 'reaction_count',
 PAGE_HEADER_NAMES = ['post_id', 'post_url', 'post_text', 'reaction_count',
                      'profile_id', 'profile_name', 'profile_url', 'post_time', 'comments',
                      'page_id', 'page_name', 'page_url', 'community', 'page_about']
+
+PROFILE_HEADER_NAMES = ['post_id', 'post_url', 'post_text', 'reaction_count',
+                        'profile_id', 'profile_name', 'profile_url', 'post_time', 'comments',
+                        'page_id', 'page_name', 'page_url', 'community', 'page_about']

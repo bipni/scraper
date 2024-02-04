@@ -6,7 +6,7 @@ from fb_scraper import get_group_posts_by_group_id
 from constants import GROUP_HEADER_NAMES
 
 GROUP_ID = '140473731634479'
-COOKIES_NAME = ['keye.txt']
+COOKIES_NAME = ['nila.txt']
 COMMUNITY = 'Information'
 GROUP_URL = f'https://mbasic.facebook.com/groups/{GROUP_ID}'
 GROUP_NAME = 'HM Tour & Travels (ট্রাভেলিং গ্রুপ)'
@@ -16,6 +16,7 @@ START_URL = None
 
 page = 1
 next_url = None
+total_posts_count = 0
 
 if not exists(f'files/{FILE_NAME}'):
     with open(f'files/{FILE_NAME}', 'w', encoding='utf-8', newline='') as csv_file:
@@ -32,6 +33,7 @@ while True:
     next_url = data['next_url']
 
     if not next_url:
+        print('This group has no posts available')
         break
 
     print(next_url)
@@ -44,6 +46,7 @@ while True:
 
     if data:
         group_posts = data['group_posts']
+        total_posts_count += total_posts_count + len(group_posts)
 
         for group_post in group_posts:
             copy_dict = {}
