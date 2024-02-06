@@ -25,58 +25,61 @@ if not exists(f'files/{FILE_NAME}'):
         csv_writer.writerow(GROUP_HEADER_NAMES)
 
 while True:
-    print(f'Total Posts Scraped: {total_posts_count}')
+    try:
+        print(f'Total Posts Scraped: {total_posts_count}')
 
-    if not next_url:
-        data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=START_URL)
-    else:
-        data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=next_url)
+        if not next_url:
+            data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=START_URL)
+        else:
+            data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=next_url)
 
-    print(f'Next URL: {data["next_url"]}')
-    next_url = data['next_url']
+        print(f'Next URL: {data["next_url"]}')
+        next_url = data['next_url']
 
-    if not next_url:
-        print('This group might not have any posts available')
-        print(f'or {cookie_files} cookie is invalid')
+        if not next_url:
+            print('This group might not have any posts available')
+            print(f'or {cookie_files} cookie is invalid')
+            page += 1
+            cookie_index = page % len(COOKIES_NAME)
+            cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
+            print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
+            continue
+
+        with open('next_url.txt', 'w', newline='', encoding='utf-8') as f:
+            f.write(str(next_url))
+
         page += 1
         cookie_index = page % len(COOKIES_NAME)
         cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
         print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
-        continue
 
-    with open('next_url.txt', 'w', newline='', encoding='utf-8') as f:
-        f.write(str(next_url))
+        if data:
+            group_posts = data['group_posts']
+            total_posts_count += len(group_posts)
 
-    page += 1
-    cookie_index = page % len(COOKIES_NAME)
-    cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
-    print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
+            for group_post in group_posts:
+                copy_dict = {}
 
-    if data:
-        group_posts = data['group_posts']
-        total_posts_count += len(group_posts)
+                for header in GROUP_HEADER_NAMES:
+                    if header in list(group_post.keys()):
+                        copy_dict[header] = group_post[header]
+                    else:
+                        copy_dict[header] = None
 
-        for group_post in group_posts:
-            copy_dict = {}
+                copy_dict['community'] = COMMUNITY
+                copy_dict['group_id'] = GROUP_ID
+                copy_dict['group_url'] = GROUP_URL
+                copy_dict['group_name'] = GROUP_NAME
+                copy_dict['group_about'] = GROUP_NAME
 
-            for header in GROUP_HEADER_NAMES:
-                if header in list(group_post.keys()):
-                    copy_dict[header] = group_post[header]
+                if exists(f'files/{FILE_NAME}'):
+                    with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
+                        writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
+                        writer.writerow(copy_dict)
                 else:
-                    copy_dict[header] = None
-
-            copy_dict['community'] = COMMUNITY
-            copy_dict['group_id'] = GROUP_ID
-            copy_dict['group_url'] = GROUP_URL
-            copy_dict['group_name'] = GROUP_NAME
-            copy_dict['group_about'] = GROUP_NAME
-
-            if exists(f'files/{FILE_NAME}'):
-                with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
-                    writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
-                    writer.writerow(copy_dict)
-            else:
-                with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
-                    writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
-                    writer.writeheader()
-                    writer.writerow(copy_dict)
+                    with open(f'files/{FILE_NAME}', 'a', newline='', encoding='utf-8') as f:
+                        writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
+                        writer.writeheader()
+                        writer.writerow(copy_dict)
+    except Exception as error:
+        print(error)
