@@ -8,7 +8,7 @@ from fb_scraper import Scraper, exceptions
 from constants import PAGE_HEADER_NAMES
 
 PAGE_ID = 'CocaColaBGD'
-COOKIES = ['lipa.txt', 'lubana.txt', 'sharmin.txt']
+COOKIES = ['madi.txt', 'marie.txt', 'sathi.txt', 'satti.txt']
 COMMUNITY = 'Beverage'
 PAGE_URL = f'https://mbasic.facebook.com/{PAGE_ID}'
 PAGE_NAME = 'Coca-Cola Bangladesh'
