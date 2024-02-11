@@ -1,7 +1,9 @@
 import csv
+import sys
 from os.path import exists
 
-from fb_scraper import Scraper
+from errorify import errorify
+from fb_scraper import Scraper, exceptions
 
 from constants import PAGE_HEADER_NAMES
 
@@ -71,5 +73,8 @@ while True:
                         writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
                         writer.writeheader()
                         writer.writerow(copy_dict)
+    except exceptions.RottenCookies as error:
+        print(errorify(error))
+        sys.exit()
     except Exception as error:
-        print(error)
+        print(errorify(error))
