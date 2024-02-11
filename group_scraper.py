@@ -1,12 +1,13 @@
 import csv
 from os.path import exists
 
-from fb_scraper import get_group_posts_by_group_id
+from errorify import errorify
+from fb_scraper import Scraper
 
 from constants import GROUP_HEADER_NAMES
 
 GROUP_ID = '140473731634479'
-COOKIES_NAME = ['nila.txt']
+COOKIES = ['nila.txt', 'lipa.txt', 'lubana.txt', 'sharmin.txt']
 COMMUNITY = 'Information'
 GROUP_URL = f'https://mbasic.facebook.com/groups/{GROUP_ID}'
 GROUP_NAME = 'HM Tour & Travels (ট্রাভেলিং গ্রুপ)'
@@ -14,8 +15,8 @@ GROUP_ABOUT = 'Travel Group'
 FILE_NAME = f'{GROUP_ID}.csv'
 START_URL = None
 
-page = 1
-cookie_files = f'cookies/{COOKIES_NAME[0]}'
+scraper = Scraper(COOKIES)
+
 next_url = None
 total_posts_count = 0
 
@@ -29,29 +30,19 @@ while True:
         print(f'Total Posts Scraped: {total_posts_count}')
 
         if not next_url:
-            data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=START_URL)
+            data = scraper.get_group_posts_by_group_id(group_id=GROUP_ID, start_url=START_URL)
         else:
-            data = get_group_posts_by_group_id(group_id=GROUP_ID, cookies=cookie_files, start_url=next_url)
+            data = scraper.get_group_posts_by_group_id(group_id=GROUP_ID, start_url=next_url)
 
         print(f'Next URL: {data["next_url"]}')
         next_url = data['next_url']
 
         if not next_url:
             print('This group might not have any posts available')
-            print(f'or {cookie_files} cookie is invalid')
-            page += 1
-            cookie_index = page % len(COOKIES_NAME)
-            cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
-            print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
-            continue
+            break
 
         with open('next_url.txt', 'w', newline='', encoding='utf-8') as f:
             f.write(str(next_url))
-
-        page += 1
-        cookie_index = page % len(COOKIES_NAME)
-        cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
-        print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
 
         if data:
             group_posts = data['group_posts']
@@ -82,4 +73,4 @@ while True:
                         writer.writeheader()
                         writer.writerow(copy_dict)
     except Exception as error:
-        print(error)
+        print(errorify(error))

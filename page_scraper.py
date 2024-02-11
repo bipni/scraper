@@ -1,12 +1,12 @@
 import csv
 from os.path import exists
 
-from fb_scraper import get_page_posts_by_page_id
+from fb_scraper import Scraper
 
 from constants import PAGE_HEADER_NAMES
 
 PAGE_ID = 'CocaColaBGD'
-COOKIES_NAME = ['nila.txt']
+COOKIES = ['lipa.txt', 'lubana.txt', 'sharmin.txt']
 COMMUNITY = 'Beverage'
 PAGE_URL = f'https://mbasic.facebook.com/{PAGE_ID}'
 PAGE_NAME = 'Coca-Cola Bangladesh'
@@ -14,8 +14,8 @@ PAGE_ABOUT = 'Coca-cola beverage company'
 FILE_NAME = f'{PAGE_ID}.csv'
 START_URL = None
 
-page = 1
-cookie_files = f'cookies/{COOKIES_NAME[0]}'
+scraper = Scraper(COOKIES)
+
 next_url = None
 total_posts_count = 0
 
@@ -29,29 +29,19 @@ while True:
         print(f'Total Posts Scraped: {total_posts_count}')
 
         if not next_url:
-            data = get_page_posts_by_page_id(page_id=PAGE_ID, cookies=cookie_files, start_url=START_URL)
+            data = scraper.get_page_posts_by_page_id(page_id=PAGE_ID, start_url=START_URL)
         else:
-            data = get_page_posts_by_page_id(page_id=PAGE_ID, cookies=cookie_files, start_url=next_url)
+            data = scraper.get_page_posts_by_page_id(page_id=PAGE_ID, start_url=next_url)
 
         print(f'Next URL: {data["next_url"]}')
         next_url = data['next_url']
 
         if not next_url:
             print('This page might not have any posts available')
-            print(f'or {cookie_files} cookie is invalid')
-            page += 1
-            cookie_index = page % len(COOKIES_NAME)
-            cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
-            print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
-            continue
+            break
 
         with open('next_url.txt', 'w', newline='', encoding='utf-8') as f:
             f.write(str(next_url))
-
-        page += 1
-        cookie_index = page % len(COOKIES_NAME)
-        cookie_files = f'cookies/{COOKIES_NAME[cookie_index]}'
-        print(f'Cookie Using: {COOKIES_NAME[cookie_index]}')
 
         if data:
             page_posts = data['page_posts']
