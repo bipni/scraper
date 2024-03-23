@@ -1,19 +1,21 @@
 import csv
+import sys
 from os.path import exists
 
 from errorify import errorify
 from fb_scraper import Scraper
+from fb_scraper.exceptions import RottenCookies
 
 from constants import GROUP_HEADER_NAMES
 
-GROUP_ID = '140473731634479'
-COOKIES = ['nila.txt', 'lipa.txt', 'lubana.txt', 'sharmin.txt']
-COMMUNITY = 'Information'
+GROUP_ID = 'weeforum'
+COOKIES = ['khatun.txt', 'labbonno.txt', 'madison.txt', 'mhiya.txt', 'mim.txt']
+COMMUNITY = 'Women'
 GROUP_URL = f'https://mbasic.facebook.com/groups/{GROUP_ID}'
-GROUP_NAME = 'HM Tour & Travels (ট্রাভেলিং গ্রুপ)'
-GROUP_ABOUT = 'Travel Group'
+GROUP_NAME = 'Women Entrepreneurs and e-Commerce Forum (weeforum)'
+GROUP_ABOUT = 'Discussion'
 FILE_NAME = f'{GROUP_ID}.csv'
-START_URL = None
+START_URL = 'https://mbasic.facebook.com/groups/289401598768855?bacr=1706690501%3A1120313032344370%3A1120313032344370%2C0%2C122%3A7%3AKw%3D%3D&multi_permalinks&eav=AfZLBlaBNA-CMSUbaw_3jYukaaft5ojCOnPyE6V2_5DC1FiJqXPnpIzVyt3T1WoKnKE&paipv=0&refid=18'
 
 scraper = Scraper(COOKIES)
 
@@ -72,5 +74,7 @@ while True:
                         writer = csv.DictWriter(f, fieldnames=copy_dict.keys())
                         writer.writeheader()
                         writer.writerow(copy_dict)
+    except RottenCookies as error:
+        sys.exit()
     except Exception as error:
         print(errorify(error))
